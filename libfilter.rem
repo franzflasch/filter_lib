@@ -1,0 +1,8 @@
+#commit_version = "492a943b7e448469cd8e88f60fda41ef46aa3b2a"
+
+# git:
+#sw_package.set_uri("https://github.com/franzflasch/filter_lib.git;src_rev=#{commit_version}")
+sw_package.set_uri("https://github.com/franzflasch/filter_lib.git")
+
+sw_package.set_inc("inc/")
+sw_package.set_src("src/lib_filter_sos.c")
