@@ -46,7 +46,7 @@ As = sos(:,4:6);
 
 %%%% STEP7:
 % you can now print a C conform output of the sections Bs and As with the function convert_section_to_c_code which should be included
-% in the matlab-script convert_section_to_c_code.m (using floating point precision "5.16f")
+% in the octave-script convert_section_to_c_code.m (using floating point precision "5.16f")
 % get number of rows and cols (using only Bs because both section should have the same size)
 % include the output into your c program
 [rows, cols] = size(Bs);
