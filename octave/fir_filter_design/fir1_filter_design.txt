@@ -33,7 +33,7 @@ coeffs = fir1(50, fc/(fs/2));
 
 %%%% STEP4:
 % you can now print a C conform output of the coeffs with the function convert_fir1_to_c_code which should be included
-% in the matlab-script convert_fir1_to_c_code.m (using floating point precision "5.16f")
+% in the octave-script convert_fir1_to_c_code.m (using floating point precision "5.16f")
 % include the output into your c program
 [~,rows] = size(coeffs);
 convert_fir1_to_c_code
