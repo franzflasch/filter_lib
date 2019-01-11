@@ -1,0 +1,74 @@
+% Prerequisites:
+% sudo apt-get install octave octave-signal
+
+%%%% STEP0:
+% load signal package in octave:
+pkg load signal
+
+%%%% STEP1:
+% At first specify the sampling frequency:
+fs = 400;
+
+%%%% STEP2:
+% Then set the cutoff frequency:
+fc = 50;
+
+%%%% STEP3:
+% then use the function butter to design a butterworth filter: (here order 5)
+[b,a] = butter(5, fc/(fs/2));
+
+%%%% OPTIONAL STEP:
+	% if you want you can plot the filters magnitude and phase response with (1024 points):
+	freqz(b,a,1024,fs);
+
+	% you can also plot impulse response:
+	x = [1,zeros(1,256-1)];
+	y = filter(b,a,x);
+	plot(y);
+
+	% or you can draw step response with 256 samples:
+	x = [1,ones(1,256-1)];
+	y = filter(b,a,x);
+	plot(y);
+
+
+%%%% STEP4:
+% convert the filter to second order sections with gain g:
+[sos,g] = tf2sos(b,a);
+
+%%%% STEP5:
+% Section numerator polynomials:
+Bs = sos(:,1:3);
+
+%%%% STEP6:
+% Section denominator polynomials
+As = sos(:,4:6);
+
+%%%% STEP7:
+% you can now print a C conform output of the sections Bs and As with the function convert_section_to_c_code which should be included
+% in the matlab-script convert_section_to_c_code.m (using floating point precision "5.16f")
+% get number of rows and cols (using only Bs because both section should have the same size)
+% include the output into your c program
+[rows, cols] = size(Bs);
+convert_section_to_c_code
+
+%%%% OPTIONAL STEP:
+	% you can use the commands to compare the output of (x) with the output of your c program
+
+	% draw gain scaled impulse response with 256 samples:
+	nsamps = 256;
+	[nsec,temp] = size(sos);
+	x = g*[1,zeros(1,nsamps-1)]; % SCALED impulse signal
+	for i=1:nsec
+	  x = filter(Bs(i,:),As(i,:),x); % Series sections
+	end
+	plot(x);
+
+	% draw gain scaled step response with 256 samples:
+	nsamps = 256;
+	[nsec,temp] = size(sos);
+	x = g*[1,ones(1,nsamps-1)]; % SCALED impulse signal
+	for i=1:nsec
+	  x = filter(Bs(i,:),As(i,:),x); % Series sections
+	end
+	plot(x);

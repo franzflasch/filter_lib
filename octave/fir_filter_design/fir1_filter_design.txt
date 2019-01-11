@@ -1,0 +1,40 @@
+% Prerequisites:
+% sudo apt-get install octave octave-signal
+
+%%%% STEP0:
+% load signal package in octave:
+pkg load signal
+
+%%%% STEP1:
+% At first specify the sampling frequency:
+fs = 400;
+
+%%%% STEP2:
+% Then set the cutoff frequency:
+fc = 50;
+
+%%%% STEP3:
+% then use the function fir1 to design a fir1 filter: (here order 50)
+coeffs = fir1(50, fc/(fs/2));
+
+%%%% OPTIONAL STEP:
+	% if you want you can plot the filters magnitude and phase response with (1024 points), here normalized frequency:
+	freqz(coeffs,1,1024,fs);
+
+	% you can also plot impulse response:
+	x = [1,zeros(1,256-1)];
+	y = filter(coeffs,1,x);
+	plot(y);
+
+	% or you can draw step response with 256 samples:
+	x = [1,ones(1,256-1)];
+	y = filter(coeffs,1,x);
+	plot(y);
+
+%%%% STEP4:
+% you can now print a C conform output of the coeffs with the function convert_fir1_to_c_code which should be included
+% in the matlab-script convert_fir1_to_c_code.m (using floating point precision "5.16f")
+% include the output into your c program
+[~,rows] = size(coeffs);
+convert_fir1_to_c_code
+
